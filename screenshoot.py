@@ -68,9 +68,9 @@ def loop (ip1:(str), ip2:(str), lokasi:(str), nama:(str)):
     element = driver.find_element('name','rep_form')
     crt_folder(lokasi+ f'{tahun}/' + str.title(month[month_s]))
     if (i % 2 == 0):
-        element.screenshot(lokasi+ f'{tahun}/' + str.title(month[month_s]) + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic.png')
+        element.screenshot(lokasi+ f'{tahun}/' + str.title(month[month_s]) + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic.png')
     else:
-        element.screenshot(lokasi+ f'{tahun}/' + str.title(month[month_s]) + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic.png') 
+        element.screenshot(lokasi+ f'{tahun}/' + str.title(month[month_s]) + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic.png') 
 
 # Fungsi untuk Screenshoot Custom
 def loop2 (ip1:(str), ip2:(str), lokasi:(str), nama:(str)):
@@ -93,23 +93,29 @@ def loop2 (ip1:(str), ip2:(str), lokasi:(str), nama:(str)):
     crt_folder(lokasi+ f'{tahun}/' + 'Backup')
 
     if io == "IN" and ipsec == "1":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic_IN.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic_IN.png')
     elif io == "IN" and ipsec == "2":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic_IN.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic_IN.png')
     elif io == "OUT" and ipsec == "1":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic_OUT.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic_OUT.png')
     elif io == "OUT" and ipsec == "2":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic_OUT.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic_OUT.png')
     elif io == None and ipsec == "1":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC1_traffic.png')
     elif io == None and ipsec == "2":
-        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_folder)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic.png')
+        element.screenshot(lokasi+ f'{tahun}/' + 'Backup' + '/' + str(tgl_file)+f'-{tahun}_'+nama+'-WAN-IPSEC2_traffic.png')
 
 
 pertanyaan = 'Y'
 while(pertanyaan == 'Y'):
     while True:
         try:
+            # Login
+            print('==============================')
+            username = input("MASUKAN USERNAME : ")
+            password = input("MASUKAN PASSWORD : ")
+            cls()
+
             # Input Pilihan Custom -----------------------------
             print('============================')
             print('1. Screenshoot Harian')
@@ -144,12 +150,14 @@ while(pertanyaan == 'Y'):
             jam2 = input("Masukan Jam (24.00) : ")  #nanti akan mendapatkan nilai [19] [00]
             jam2_s = jam2.split('.')
 
+            # -------------------------------------------------------------------------------------------------
             int_month_s = int(waktu_s[1]) #Ambil Data String Waktu_s [01] menjadi Nilai Integer [1]
             month_s = str(int_month_s) #Fungsinya Menghilangkan angka 0 di awal, lalu di Ubah ke Str
             int_day = int(waktu_s[2]) #dan Ini mengambil tanggal dan mengubahnya ke int
-            tgl_folder = str.upper(str(int_day) +'-'+ month[month_s]) #int_day berubah nilai dari Int ke Str
+            tgl_file = str.upper(str(int_day) +'-'+ month[month_s]) #int_day berubah nilai dari Int ke Str
+            # -------------------------------------------------------------------------------------------------
 
-            tahun = (str(waktu_s[0]))
+            tahun = (str(waktu_s[0])) #Variabel Tahun Untuk di pakai pada Fungsi Crt_Folder
 
             epoch_time = datetime.datetime(int(waktu_s[0]),int(waktu_s[1]), int(waktu_s[2]), int(jam_s[0]), int(jam_s[1]), 0).timestamp()*1000
             epoch_time2 = datetime.datetime(int(waktu_s[0]),int(waktu_s[1]), int(waktu_s[2]), int(jam2_s[0]), int(jam2_s[1]), 0).timestamp()*1000
@@ -180,8 +188,8 @@ while(pertanyaan == 'Y'):
 
     # Login ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     driver.get('http://10.38.3.25/login/login.jsp')
-    driver.find_element('name','j_username').send_keys('ald')
-    driver.find_element('name','j_password').send_keys('ald' + Keys.ENTER)
+    driver.find_element('name','j_username').send_keys(username)
+    driver.find_element('name','j_password').send_keys(password + Keys.ENTER)
         
     # Kondisi dan Aksi Loop sesuai Input=========================================================================
     if pilihan == "2":
